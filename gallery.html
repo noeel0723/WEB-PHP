@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      color: #504b4b;
+      scroll-behavior: smooth;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 10%;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: 600;
+      color: #000;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links li a {
+      color: #000;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-links li a:hover,
+    .nav-links li a.active {
+      background-color: #979899;
+    }
+
+    .nav-links li a::after {
+      content: '';
+      position: absolute;
+      background: rgba(255,255,255,0.4);
+      border-radius: 50%;
+      transform: scale(0);
+      width: 100px;
+      height: 100px;
+      top: 50%;
+      left: 50%;
+      pointer-events: none;
+      transition: transform 0.5s, opacity 1s;
+      opacity: 0;
+    }
+
+    .nav-links li a:active::after {
+      transform: scale(2);
+      opacity: 1;
+      transition: 0s;
+    }
+
+    .page-header {
+      margin-top: 120px;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .page-header h1 {
+      font-size: 2.8em;
+      color: #222;
+      margin-bottom: 10px;
+      height: 1.5em;
+    }
+
+    .page-header p {
+      font-size: 1.1em;
+      color: #555;
+    }
+
+    .gallery {
+      padding: 40px 10%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .gallery img {
+      max-width: 100%;
+      width: 350px;
+      border-radius: 12px;
+      transition: transform 0.4s ease, filter 0.4s ease, box-shadow 0.4s ease;
+      opacity: 0;
+      animation: fadeIn 1s ease-in-out forwards;
+      cursor: pointer;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.07);
+      filter: brightness(1.1) saturate(1.2);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .gallery img:nth-child(1) { animation-delay: 0.3s; }
+    .gallery img:nth-child(2) { animation-delay: 0.5s; }
+    .gallery img:nth-child(3) { animation-delay: 0.7s; }
+
+    footer {
+      padding: 20px;
+      text-align: center;
+      background-color: #222;
+      color: #ddd;
+      margin-top: 60px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.85);
+    }
+
+    .modal-content {
+      margin: 5% auto;
+      display: block;
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 10px;
+      border: 4px solid transparent;
+      animation: borderPulse 2s infinite ease-in-out;
+    }
+
+    .modal-content:hover {
+      cursor: pointer;
+    }
+
+    .close {
+      position: absolute;
+      top: 30px;
+      right: 50px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 3000;
+    }
+
+    .close:hover {
+      color: #ccc;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #typing-header::after {
+      content: "|";
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Background bubble animation */
+    .bubbles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bubbles span {
+      position: absolute;
+      display: block;
+      width: 20px;
+      height: 20px;
+      background: rgba(100, 149, 237, 0.2);
+      border-radius: 50%;
+      animation: rise 15s linear infinite;
+      bottom: -100px;
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-1000px) scale(0.5);
+        opacity: 0;
+      }
+    }
+
+    @keyframes borderPulse {
+      0% { border-color: rgba(255, 255, 255, 0.1); }
+      50% { border-color: rgba(255, 255, 255, 0.7); }
+      100% { border-color: rgba(255, 255, 255, 0.1); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Bubbles Background -->
+  <div class="bubbles">
+    <span style="left: 10%; animation-delay: 0s;"></span>
+    <span style="left: 20%; animation-delay: 2s;"></span>
+    <span style="left: 30%; animation-delay: 4s;"></span>
+    <span style="left: 40%; animation-delay: 1s;"></span>
+    <span style="left: 50%; animation-delay: 3s;"></span>
+    <span style="left: 60%; animation-delay: 5s;"></span>
+    <span style="left: 70%; animation-delay: 2s;"></span>
+    <span style="left: 80%; animation-delay: 4s;"></span>
+    <span style="left: 90%; animation-delay: 6s;"></span>
+  </div>
+
+  <!-- Navigation -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">Personal Web</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="gallery.html" class="active">Gallery</a></li>
+        <li><a href="blog.php">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <h1 id="typing-header"></h1>
+    <p>My favorite pictures and my favorite football players</p>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery">
+    <img src="images/Manchester-United.webp" alt="Photo 1" class="reveal">
+    <img src="images/photo2.png" alt="Photo 2" class="reveal">
+    <img src="images/photo3.jpg" alt="Photo 3" class="reveal">
+  </section>
+
+  <!-- Modal Preview -->
+  <div class="modal" id="imgModal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImg" alt="Preview Image">
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 MyWeb. All rights reserved.</p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Modal logic
+    const modal = document.getElementById("imgModal");
+    const modalImg = document.getElementById("modalImg");
+    const galleryImages = document.querySelectorAll(".gallery img");
+
+    galleryImages.forEach(img => {
+      img.addEventListener("click", () => {
+        modal.style.display = "block";
+        modalImg.src = img.src;
+        modalImg.alt = img.alt;
+      });
+    });
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+
+    window.addEventListener("click", function(e) {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    window.addEventListener("keydown", function(e) {
+      if (e.key === "Escape") {
+        closeModal();
+      }
+    });
+
+    // Typing effect
+    const typingElement = document.getElementById("typing-header");
+    const text = "Gallery";
+    let index = 0;
+
+    function type() {
+      if (index <= text.length) {
+        typingElement.textContent = text.substring(0, index);
+        index++;
+        setTimeout(type, 150);
+      }
+    }
+
+    window.onload = type;
+
+    // Reveal on scroll
+    function revealOnScroll() {
+      const reveals = document.querySelectorAll('.reveal');
+      reveals.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 50) {
+          el.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+  </script>
+
+</body>
+</html>

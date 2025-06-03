@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Imanuel Personal Website</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      color: #504b4b;
+      scroll-behavior: smooth;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in-out both;
+    }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.6s ease-out;
+    }
+
+    .scroll-reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 10%;
+      z-index: 1000;
+      background-color: #ffffff;
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: 600;
+      color: #000000;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .nav-links li a {
+      color: #000000;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .nav-links li a:hover,
+    .nav-links li a.active {
+      background-color: #979899;
+    }
+
+    .hero {
+      height: 100vh;
+      background: radial-gradient(circle at center, #ffffff 0%, #a4a3a3 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .hero-content {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+      max-width: 700px;
+    }
+
+    .hero-content h1 {
+      font-size: 2.8em;
+      margin-bottom: 15px;
+      color: #000000;
+    }
+
+    .hero-content h1 span {
+      color: #3b82f6;
+      font-weight: bold;
+    }
+
+    .hero-content p {
+      font-size: 1.1em;
+      color: #000000;
+      margin-bottom: 30px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-buttons button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .hero-buttons .btn-primary {
+      background-color: #3b82f6;
+      color: white;
+    }
+
+    .hero-buttons .btn-primary:hover {
+      background-color: #2563eb;
+    }
+
+    .hero-buttons .btn-outline {
+      background-color: transparent;
+      border: 2px solid #3b82f6;
+      color: #3b82f6;
+    }
+
+    .hero-buttons .btn-outline:hover {
+      background-color: #3b82f6;
+      color: white;
+    }
+
+    .quote-section {
+      background: linear-gradient(to right, #ffffff, #ffffff);
+      padding: 60px 20px;
+      text-align: center;
+      color: rgb(0, 0, 0);
+    }
+
+    .quote-box {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 1.5em;
+      font-style: italic;
+      line-height: 1.6;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    footer {
+      padding: 20px;
+      text-align: center;
+      background-color: #222;
+      color: #ddd;
+    }
+
+    .typing {
+      border-right: 2px solid #3b82f6;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">Personal Web</div>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="blog.php">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero fade-in">
+    <div class="hero-content">
+      <h1>Hello, I'm<br><span class="typing" id="typedName"></span></h1>
+      <p>Hello, my name is Imanuel Jeremia, I am a student of the Faculty of Engineering, Informatics study program. Hope you enjoy your time here!</p>
+      <div class="hero-buttons">
+        <button class="btn-primary" onclick="scrollToQuote()">My favorite Quote</button>
+        <button class="btn-outline" onclick="scrollToContact()">Contact Me</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quote Section -->
+  <section class="quote-section fade-in" id="quote">
+    <div class="quote-box scroll-reveal">
+      <p>“Your love makes me strong, your hate makes me unstoppable” — Cristiano Ronaldo</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 MyWeb. All rights reserved.</p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    const text = "Imanuel Jeremia";
+    let index = 0;
+    const speed = 100;
+    const typedEl = document.getElementById("typedName");
+
+    function typeText() {
+      if (index < text.length) {
+        typedEl.innerHTML += text.charAt(index);
+        index++;
+        setTimeout(typeText, speed);
+      }
+    }
+
+    function revealOnScroll() {
+      const reveals = document.querySelectorAll('.scroll-reveal');
+      const windowHeight = window.innerHeight;
+
+      reveals.forEach(el => {
+        const elementTop = el.getBoundingClientRect().top;
+        if (elementTop < windowHeight - 100) {
+          el.classList.add('active');
+        }
+      });
+    }
+
+    function scrollToQuote() {
+      document.getElementById("quote").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function scrollToContact() {
+      document.querySelector('footer').scrollIntoView({ behavior: "smooth" });
+    }
+
+    // Scroll to top button
+    const scrollBtn = document.createElement('button');
+    scrollBtn.innerHTML = '&#8679;';
+    scrollBtn.style.position = 'fixed';
+    scrollBtn.style.bottom = '30px';
+    scrollBtn.style.right = '30px';
+    scrollBtn.style.padding = '10px 15px';
+    scrollBtn.style.fontSize = '20px';
+    scrollBtn.style.border = 'none';
+    scrollBtn.style.borderRadius = '50%';
+    scrollBtn.style.backgroundColor = '#3b82f6';
+    scrollBtn.style.color = 'white';
+    scrollBtn.style.cursor = 'pointer';
+    scrollBtn.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)';
+    scrollBtn.style.display = 'none';
+    scrollBtn.style.zIndex = '999';
+    document.body.appendChild(scrollBtn);
+
+    scrollBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', () => {
+      revealOnScroll();
+      scrollBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
+    });
+
+    window.onload = () => {
+      typeText();
+      revealOnScroll();
+    };
+  </script>
+
+</body>
+</html>
